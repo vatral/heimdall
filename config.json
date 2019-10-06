@@ -1,0 +1,50 @@
+{
+	"commands" : {
+		"ssh" : "/usr/bin/ssh"
+	},
+	"remote": {
+		"server"             : "pi.example.com",
+		"port"               : "22",
+		"user"               : "pi",
+		"ssh-key"            : "/home/user/.ssh/id_ed25519.pub",
+		"backwards-port"     : "10022",
+		"local-ssh-port"     : "22",
+		"terminal"           : "terminology",
+		"terminal-exec"      : "terminology -e",
+		"terminal-exec-keep" : "terminology -H -e"
+
+
+	},
+	"startup" : {
+		"remote-run" : [
+			[ "sudo", "killall", "iotop" ]
+		],
+		"workspaces" : [
+			{
+				"name" : "1: local perf",
+				"dwell-time": "0",
+				"commands" : [
+					"exec $TERM_EXEC htop",
+					"exec $TERM_EXEC sudo iotop"
+				]
+			},
+			{
+				"name" : "2: desktop perf",
+				"dwell-time": "10",
+				"commands": [
+					"exec $TERM_EXEC $SSH_TO_HOST htop",
+					"exec $TERM_EXEC $SSH_TO_HOST sudo iotop"
+				]
+			},
+			{
+				"name" : "3: comms",
+				"dwell-time": "10",
+				"commands" : [
+					"exec chromium-browser --new-window https://gmail.com"
+				]
+			}
+		]
+
+	}
+	
+}
